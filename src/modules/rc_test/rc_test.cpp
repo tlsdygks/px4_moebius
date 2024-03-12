@@ -40,6 +40,7 @@ int rc_test_main(int argc, char *argv[]) {
     fds[0].events = POLLIN;
 
     bool should_exit = false;
+    char last_input = '\0'; // 추가된 변수, 마지막으로 보낸 입력값을 추적합니다
 
     while (!should_exit) {
         // Wait for data to become available
@@ -81,6 +82,12 @@ int rc_test_main(int argc, char *argv[]) {
             else if (rc_channels_data.channels[3] < -0.5f) {
                 input = 'C'; // Yaw < -0.5: Send 'G'
             }
+            else if (rc_channels_data.channels[0] > 0.5f) {
+                input = 'a'; // Yaw > 0.5: Send 'C'
+            }
+            else if (rc_channels_data.channels[0] < -0.5f) {
+                input = 'b'; // Yaw < -0.5: Send 'G'
+            }
             else {
                 input = 'Z'; // Otherwise: Send 'Z'
             }
@@ -88,26 +95,20 @@ int rc_test_main(int argc, char *argv[]) {
             // Send the input character
             ssize_t bytes_written = ::write(serial_fd, &input, 1);
 
-            if (bytes_written < 0) {
-                PX4_ERR("Error writing to serial port.");
-                break;
-            } else if (bytes_written == 0) {
-                PX4_WARN("No data written to serial port.");
-            } else {
-                PX4_INFO("Sent '%c' to serial port.", input);
-            }
-        }
-        // Check for user input to exit
-        char exit_char;
-        if (::read(STDIN_FILENO, &exit_char, 1) > 0) {
-            if (exit_char == 'x') {
-                should_exit = true;
+            if (input != last_input) {
+                if (bytes_written < 0) {
+                    PX4_ERR("Error writing to serial port.");
+                    break;
+                } else if (bytes_written == 0) {
+                    PX4_WARN("No data written to serial port.");
+                } else {
+                    PX4_INFO("Sent '%c' to serial port.", input);
+                }
+                last_input = input; // 마지막으로 보낸 입력값을 업데이트합니다
             }
         }
 
     }
-
-
 
     ::close(serial_fd);
 
