@@ -1,0 +1,5 @@
+menuconfig MODULES_RC_TEST
+        bool "rc_test"
+        default n
+        ---help---
+                Enable support for rc_test
