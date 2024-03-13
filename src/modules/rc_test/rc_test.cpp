@@ -83,10 +83,16 @@ int rc_test_main(int argc, char *argv[]) {
                 input = 'C'; // Yaw < -0.5: Send 'G'
             }
             else if (rc_channels_data.channels[0] > 0.5f) {
-                input = 'a'; // Yaw > 0.5: Send 'C'
+                input = 'a'; // Roll > 0.5: Send 'a'
             }
             else if (rc_channels_data.channels[0] < -0.5f) {
-                input = 'b'; // Yaw < -0.5: Send 'G'
+                input = 'b'; // Roll < -0.5: Send 'b'
+            }
+            else if (rc_channels_data.channels[1] > 0.5f) {
+                input = 'L'; // Throttle > 0.5: Send 'L'
+            }
+            else if (rc_channels_data.channels[1] < -0.5f) {
+                input = 'M'; // Throttle < -0.5: Send 'M'
             }
             else {
                 input = 'Z'; // Otherwise: Send 'Z'
@@ -106,7 +112,11 @@ int rc_test_main(int argc, char *argv[]) {
                 }
                 last_input = input; // 마지막으로 보낸 입력값을 업데이트합니다
             }
+
+
         }
+
+
 
     }
 
