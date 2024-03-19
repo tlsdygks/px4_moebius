@@ -32,11 +32,11 @@
 ############################################################################
 
 px4_add_module(
-    MODULE modules__rc_test
-    MAIN rc_test
+    MODULE modules__pwm_test
+    MAIN pwm_test
     STACK_MAIN 2000
     SRCS
-        rc_test.cpp
+        pwm_test.cpp
     DEPENDS
         px4_work_queue
 )

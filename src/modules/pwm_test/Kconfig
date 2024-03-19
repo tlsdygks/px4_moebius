@@ -1,0 +1,5 @@
+menuconfig MODULES_PWM_TEST
+        bool "pwm_test"
+        default n
+        ---help---
+                Enable support for pwm_test
